@@ -1,0 +1,41 @@
+# Unreal Engine build / cache folders
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+Build/
+Plugins/**/Binaries/
+Plugins/**/Intermediate/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+*.xcworkspace
+*.xcodeproj
+
+# Compiled files
+*.slo
+*.lo
+*.o
+*.obj
+*.pch
+*.dll
+*.dylib
+*.so
+*.exe
+*.lib
+*.a
+*.pdb
+*.ipa
+*.apk
+
+# OS
+.DS_Store
+Thumbs.db
