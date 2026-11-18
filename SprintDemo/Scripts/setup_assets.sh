@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-project_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-: "${UE_ROOT:?Set UE_ROOT to the Unreal Engine 5.8 installation directory}"
+source "$(dirname -- "${BASH_SOURCE[0]}")/ue_env.sh"
 
-"$UE_ROOT/Engine/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor" \
-    "$project_dir/SprintDemo.uproject" -run=SprintDemoSetup \
+if [[ ! -x "$editor" ]]; then
+    printf 'UnrealEditor not found at %s\n' "$editor" >&2
+    exit 1
+fi
+
+exec "$editor" "$project" -run=SprintDemoSetup \
     -unattended -nop4 -nosplash -nullrhi -nosound -NoShaderCompile \
     -stdout -FullStdOutLogOutput "$@"

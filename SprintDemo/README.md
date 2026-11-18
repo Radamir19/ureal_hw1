@@ -25,21 +25,24 @@
 - Для совместимости с шаблоном 5.8 к исходному персонажу добавлены отдельное действие обзора мышью и функции ввода для виджетов шаблона.
 - Вспомогательный генератор Blueprint и интеграционный тест адаптированы из локального проекта `hw_une`; сам `hw_une` не изменялся.
 
-## Сборка и проверка из Terminal
+## Сборка и проверка из терминала на macOS и Linux
 
 Из этой папки:
 
 ```bash
-export UE_ROOT="/Users/panteleevkirill/Unreal/UE_5.8"
+export UE_ROOT="/path/to/UE_5.8"
 bash Scripts/build.sh
 bash Scripts/setup_assets.sh -ValidateOnly
 bash Scripts/test.sh
 ```
 
-Для повторной генерации настроек ассетов: `bash Scripts/setup_assets.sh`. Для обычного запуска генерация не требуется. Отчёт интеграционного теста сохраняется в `Saved/Automation/index.json`.
+Команда `bash Scripts/setup_assets.sh` повторно настраивает Blueprint-ассеты ДЗ 1. Арена ДЗ 2 собирается при каждом Play на `Lvl_ThirdPerson`. Сценарий демонстрации приведён в [основном README](../README.md).
 
-На другом компьютере укажи свой путь к UE 5.8 в `UE_ROOT`. На Windows сборка выполняется штатными средствами Unreal/Visual Studio с целью `SprintDemoEditor`.
+На Windows соберите конфигурацию **Development Editor** с целью `SprintDemoEditor` в Visual Studio. Для запуска обоих тестов в редакторе откройте вкладку **Automation** в **Session Frontend** и выберите фильтр `SprintDemo`.
 
-## Проверено
+## Интеграционные тесты
 
-На этом Mac с UE 5.8: сборка Development Editor успешна; настройка ассетов прошла проверку; интеграционный тест `SprintDemo.Integration.InputBlueprintAndAnimation` завершился успешно. Тест запускает Play In Editor с NullRHI и проверяет ввод, движение, прыжок, расход выносливости, сообщение Blueprint и переходы анимации. Рендеринг этим тестом не оценивается.
+- `SprintDemo.Integration.InputBlueprintAndAnimation` проверяет ввод, движение, прыжок, выносливость, делегат взаимодействия и переходы Blueprint-анимации из ДЗ 1.
+- `SprintDemo.Integration.PCGGuardBehavior` запускает Play на `Lvl_ThirdPerson`, проверяет количество экземпляров PCG и обход препятствия по NavMesh. Затем тест имитирует нажатия **W** и **Shift** и проверяет патруль, поиск по шуму за стеной, перехват поисковой ветки при обнаружении игрока и возврат к патрулю после потери цели.
+
+`Scripts/test.sh` запускает оба теста в редакторе с NullRHI и проверяет результаты в новом `Saved/Automation/Run.*/index.json`. Для проверки внешнего вида арены используйте обычный Play.

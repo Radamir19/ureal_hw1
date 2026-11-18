@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-project_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-: "${UE_ROOT:?Set UE_ROOT to the Unreal Engine 5.8 installation directory}"
+source "$(dirname -- "${BASH_SOURCE[0]}")/ue_env.sh"
 
-bash "$UE_ROOT/Engine/Build/BatchFiles/Mac/Build.sh" \
-    SprintDemoEditor Mac Development "$project_dir/SprintDemo.uproject" \
+if [[ ! -f "$build_script" ]]; then
+    printf 'UnrealBuildTool entrypoint not found at %s\n' "$build_script" >&2
+    exit 1
+fi
+
+exec bash "$build_script" \
+    SprintDemoEditor "$platform" Development "$project" \
     -WaitMutex -NoHotReloadFromIDE "$@"
