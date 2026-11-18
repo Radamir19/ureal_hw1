@@ -1,7 +1,11 @@
 #include "SprintDemoHUD.h"
+#include "SprintArena.h"
 #include "SprintCharacter.h"
+#include "SprintDemoGameMode.h"
+#include "SprintGuard.h"
 #include "Engine/Canvas.h"
 #include "Engine/Engine.h"
+#include "Engine/World.h"
 
 void ASprintDemoHUD::DrawHUD()
 {
@@ -34,4 +38,30 @@ void ASprintDemoHUD::DrawHUD()
         X, Y + 52.0f * Scale, GEngine->GetSmallFont(), Scale);
     DrawText(TEXT("Shift Sprint (hold)   E Interact"), FLinearColor(0.78f, 0.84f, 0.9f),
         X, Y + 72.0f * Scale, GEngine->GetSmallFont(), Scale);
+
+    const ASprintDemoGameMode* GameMode = GetWorld()->GetAuthGameMode<ASprintDemoGameMode>();
+    const ASprintArena* Arena = GameMode ? GameMode->GetSprintArena() : nullptr;
+    const ASprintGuard* Guard = Arena ? Arena->GetGuard() : nullptr;
+    if (IsValid(Guard))
+    {
+        const ESprintGuardState State = Guard->GetGuardState();
+        const float Right = Canvas->ClipX - Width - X;
+        const TCHAR* Status = TEXT("GUARD   |   PATROL");
+        FLinearColor Accent(0.52f, 0.84f, 0.92f);
+        if (State == ESprintGuardState::Investigate)
+        {
+            Status = TEXT("GUARD   |   INVESTIGATING NOISE");
+            Accent = FLinearColor(1.f, 0.73f, 0.23f);
+        }
+        else if (State == ESprintGuardState::Chase)
+        {
+            Status = TEXT("GUARD   |   CHASE");
+            Accent = FLinearColor(1.f, 0.37f, 0.28f);
+        }
+        DrawRect(FLinearColor(0.025f, 0.035f, 0.05f, 0.88f), Right - 12.f * Scale, 16.f * Scale,
+            Width + 24.f * Scale, 58.f * Scale);
+        DrawText(Status, Accent, Right, 24.f * Scale, GEngine->GetSmallFont(), Scale);
+        DrawText(TEXT("Sprint behind cover to make noise"), FLinearColor(0.78f, 0.84f, 0.9f),
+            Right, 48.f * Scale, GEngine->GetSmallFont(), Scale);
+    }
 }

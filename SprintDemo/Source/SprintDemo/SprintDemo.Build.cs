@@ -6,9 +6,10 @@ public class SprintDemo : ModuleRules
     {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
         PublicDependencyModuleNames.AddRange(new[] {
-            "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG"
+            "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG",
+            "AIModule", "NavigationSystem"
         });
-        PrivateDependencyModuleNames.AddRange(new[] { "Slate", "SlateCore" });
+        PrivateDependencyModuleNames.AddRange(new[] { "Slate", "SlateCore", "GameplayTasks", "PCG" });
         PublicIncludePaths.Add("SprintDemo");
     }
 }

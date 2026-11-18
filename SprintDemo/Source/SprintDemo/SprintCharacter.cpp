@@ -1,4 +1,5 @@
 #include "SprintCharacter.h"
+#include "Perception/AISense_Hearing.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -11,6 +12,8 @@
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "InputActionValue.h"
+
+const FName ASprintCharacter::SprintFootstepTag(TEXT("SprintFootstep"));
 
 ASprintCharacter::ASprintCharacter()
 {
@@ -182,7 +185,27 @@ void ASprintCharacter::Tick(float DeltaSeconds)
 		Stamina = FMath::Min(MaxStamina, Stamina + StaminaRegenRate * DeltaSeconds);
 	}
 
+	UpdateSprintNoise(DeltaSeconds);
 	ShowStamina();
+}
+
+void ASprintCharacter::UpdateSprintNoise(float DeltaSeconds)
+{
+	const UCharacterMovementComponent* Movement = GetCharacterMovement();
+	if (!HasAuthority() || !bIsSprinting || !Movement->IsMovingOnGround() ||
+		GetVelocity().SizeSquared2D() < FMath::Square(WalkSpeed * 0.7f))
+	{
+		SprintNoiseCooldown = 0.f;
+		return;
+	}
+
+	SprintNoiseCooldown -= DeltaSeconds;
+	if (SprintNoiseCooldown <= 0.f)
+	{
+		UAISense_Hearing::ReportNoiseEvent(this, Movement->GetActorFeetLocation(), 1.f,
+			this, SprintHearingRange, SprintFootstepTag);
+		SprintNoiseCooldown = 0.32f;
+	}
 }
 
 void ASprintCharacter::ShowStamina() const

@@ -25,6 +25,9 @@ class SPRINTDEMO_API ASprintCharacter : public ACharacter
 public:
 	ASprintCharacter();
 
+	static const FName SprintFootstepTag;
+	static constexpr float SprintHearingRange = 2400.f;
+
 	virtual void Tick(float DeltaSeconds) override;
     USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
     UCameraComponent* GetFollowCamera() const { return FollowCamera; }
@@ -116,6 +119,8 @@ protected:
 private:
 	void SetSprinting(bool bNewSprinting);
 	void ShowStamina() const;
+	void UpdateSprintNoise(float DeltaSeconds);
+	float SprintNoiseCooldown = 0.f;
 
 	/** Зажата ли сейчас клавиша спринта */
 	bool bSprintKeyHeld = false;
