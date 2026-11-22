@@ -36,7 +36,7 @@ bash Scripts/setup_assets.sh -ValidateOnly
 bash Scripts/test.sh
 ```
 
-Команда `bash Scripts/setup_assets.sh` повторно настраивает Blueprint-ассеты ДЗ 1. Арена ДЗ 2 собирается при каждом Play на `Lvl_ThirdPerson`. Сценарий демонстрации приведён в [основном README](../README.md).
+Команда `bash Scripts/setup_assets.sh` повторно настраивает Blueprint-ассеты ДЗ 1. Арена ДЗ 2 собирается при каждом Play на `Lvl_ThirdPerson`.
 
 На Windows соберите конфигурацию **Development Editor** с целью `SprintDemoEditor` в Visual Studio. Для запуска обоих тестов в редакторе откройте вкладку **Automation** в **Session Frontend** и выберите фильтр `SprintDemo`.
 
